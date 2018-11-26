@@ -1,0 +1,41 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: podinfo-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: podinfo
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - podinfo-gateway
+  http:
+  - match:
+    - uri:
+        exact: /headers
+    - uri:
+        exact: /healthz
+    - uri:
+        exact: /metrics
+    - uri:
+        prefix: /readyz
+    - uri:
+        prefix: /configs       
+    route:
+    - destination:
+        host: podinfo
+        port:
+          number: 9898
