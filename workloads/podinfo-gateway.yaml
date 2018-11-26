@@ -12,7 +12,7 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - "*"
+    - "podinfo.local"
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -27,15 +27,7 @@ spec:
   http:
   - match:
     - uri:
-        exact: /headers
-    - uri:
-        exact: /healthz
-    - uri:
-        exact: /metrics
-    - uri:
-        prefix: /readyz
-    - uri:
-        prefix: /configs       
+        prefix: /
     route:
     - destination:
         host: podinfo
